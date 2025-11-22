@@ -1,0 +1,46 @@
+{
+	"schemaVersion": 1,
+	"id": "dual_wielding",
+	"version": "${version}",
+	"name": "Dual Wielding Unbound",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Survivalblock"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/ekulxam/dual_wielding",
+        "issues": "https://github.com/ekulxam/dual_wielding/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/dual_wielding/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"survivalblock.dual_wielding.DualWieldingUnbound"
+		],
+		"fabric-datagen": [
+			"survivalblock.dual_wielding.DualWieldingUnboundDataGenerator"
+		]
+	},
+	"mixins": [
+		"dual_wielding.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.1",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+    "breaks": {
+      "dualwielding": "*"
+    },
+    "custom": {
+        "modmenu": {
+            "badges": [ "library" ]
+        },
+        "loom:injected_interfaces": {
+            "net/minecraft/class_1657": ["survivalblock/dual_wielding/common/injected_interface/OffhandAttackingPlayer"]
+        }
+    }
+}
