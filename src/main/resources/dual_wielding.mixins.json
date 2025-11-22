@@ -13,6 +13,7 @@
   "client": [
     "client.ClientPlayInteractionManagerMixin",
     "client.GameRendererMixin",
+    "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
     "client.MinecraftClientMixin",
     "client.entityrenderer.EntityRendererMixin",
