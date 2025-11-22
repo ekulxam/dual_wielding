@@ -5,6 +5,11 @@ import org.jetbrains.annotations.Nullable;
 
 public interface IHaveAnotherTarget {
 
-    @Nullable
-    default Entity dual_wielding$get
+    default @Nullable Entity dual_wielding$getOffhandTargetedEntity() {
+        throw new UnsupportedOperationException();
+    }
+
+    default void dual_wielding$setOffhandTargetedEntity(@Nullable Entity targetedEntity) {
+        throw new UnsupportedOperationException();
+    }
 }

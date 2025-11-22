@@ -83,12 +83,12 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
     }
 
     @Override
-    public AttributeContainer dual_wielding$getOffhandAttributeModifiers() {
-        return this.dual_wielding$getOffhandAttributeModifiers(this.getAttributes());
+    public AttributeContainer dual_wielding$getOffhandAttributes() {
+        return this.dual_wielding$getOffhandAttributes(this.getAttributes());
     }
 
     @Override
-    public AttributeContainer dual_wielding$getOffhandAttributeModifiers(AttributeContainer original) {
+    public AttributeContainer dual_wielding$getOffhandAttributes(AttributeContainer original) {
         List<HandStackPair> handStacks = List.of(
                 new HandStackPair(this.getMainHandStack(), Hand.MAIN_HAND),
                 new HandStackPair(this.getOffHandStack(), Hand.OFF_HAND)

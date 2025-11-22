@@ -2,17 +2,25 @@
   "required": true,
   "package": "survivalblock.dual_wielding.mixin",
   "compatibilityLevel": "JAVA_21",
+  "mixinextras": {
+    "minVersion": "0.5.0"
+  },
   "mixins": [
     "LivingEntityMixin",
     "PlayerEntityMixin"
+  ],
+  "client": [
+    "client.GameRendererMixin",
+    "client.InGameHudMixin",
+    "client.MinecraftClientMixin",
+    "client.entityrenderer.EntityRendererMixin",
+    "client.entityrenderer.ItemFrameEntityRendererMixin",
+    "client.entityrenderer.MobEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "overwrites": {
     "requireAnnotations": true
-  },
-  "client": [
-    "client.InGameHudMixin"
-  ]
+  }
 }
