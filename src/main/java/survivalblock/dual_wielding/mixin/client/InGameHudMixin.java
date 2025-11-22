@@ -53,11 +53,11 @@ public class InGameHudMixin {
         }
 
         Entity targetedEntity = this.client.dual_wielding$getOffhandTargetedEntity();
-        float attackProgress = this.client.player.getAttackCooldownProgress(0.0F);
+        float attackProgress = this.client.player.dual_wielding$getOffhandAttackCooldownProgress(0.0F);
 
         boolean drawFull = false;
         if (targetedEntity instanceof LivingEntity && attackProgress >= 1.0F) {
-            drawFull = this.client.player.getAttackCooldownProgressPerTick() > 5.0F;
+            drawFull = this.client.player.dual_wielding$getOffhandAttackCooldownProgressPerTick() > 5.0F;
             drawFull &= targetedEntity.isAlive();
         }
 
@@ -80,7 +80,7 @@ public class InGameHudMixin {
             return;
         }
 
-        float attackProgress = this.client.player.getAttackCooldownProgress(0.0F);
+        float attackProgress = this.client.player.dual_wielding$getOffhandAttackCooldownProgress(0.0F);
 
         if (attackProgress < 1.0F) {
             int n = context.getScaledWindowHeight() - 20;

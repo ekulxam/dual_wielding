@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import survivalblock.dual_wielding.DualWieldingUnbound;
 import survivalblock.dual_wielding.DualWieldingUnbound.HandStackPair;
 import survivalblock.dual_wielding.common.injected_interface.OffhandAttackingPlayer;
 
@@ -80,6 +81,27 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
             return instance.dual_wielding$getOffhandAttributeValue(registryEntry);
         }
         return original.call(instance, registryEntry);
+    }
+
+    @WrapOperation(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;resetLastAttackedTicks()V"))
+    private void resetForOffhand(PlayerEntity instance, Operation<Void> original) {
+        DualWieldingUnbound.resetLastAttackedTicks(instance, original);
+    }
+
+    @WrapOperation(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttackCooldownProgress(F)F"))
+    private float getOffhandAttackProgress(PlayerEntity instance, float baseTime, Operation<Float> original) {
+        if (instance.dual_wielding$shouldAttackWithOffhand()) {
+            return instance.dual_wielding$getOffhandAttackCooldownProgress(baseTime);
+        }
+        return original.call(instance, baseTime);
+    }
+
+    @WrapOperation(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
+    private ItemStack getOffhandAttackProgress(PlayerEntity instance, Hand hand, Operation<ItemStack> original) {
+        if (instance.dual_wielding$shouldAttackWithOffhand()) {
+            return original.call(instance, Hand.OFF_HAND);
+        }
+        return original.call(instance, hand);
     }
 
     @Override

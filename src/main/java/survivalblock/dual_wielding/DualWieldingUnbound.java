@@ -1,9 +1,11 @@
 package survivalblock.dual_wielding;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import org.slf4j.Logger;
@@ -25,6 +27,14 @@ public class DualWieldingUnbound implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 	}
+
+    public static void resetLastAttackedTicks(PlayerEntity instance, Operation<Void> original) {
+        if (instance.dual_wielding$shouldAttackWithOffhand()) {
+            instance.dual_wielding$resetOffhandLastAttackedTicks();
+            return;
+        }
+        original.call(instance);
+    }
 
     public record HandStackPair(ItemStack stack, EquipmentSlot handSlot) {
 

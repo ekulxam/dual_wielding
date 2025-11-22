@@ -40,8 +40,8 @@
             "badges": [ "library" ]
         },
         "loom:injected_interfaces": {
-            "net/minecraft/class_310": ["survivalblock/dual_wielding/common/injected_interface/IHaveAnotherTarget"],
-            "net/minecraft/class_1657": ["survivalblock/dual_wielding/common/injected_interface/OffhandAttackingPlayer"]
+          "net/minecraft/class_310": ["survivalblock/dual_wielding/common/injected_interface/IHaveAnotherTarget"],
+          "net/minecraft/class_1657": ["survivalblock/dual_wielding/common/injected_interface/OffhandAttackingPlayer"]
         }
     }
 }

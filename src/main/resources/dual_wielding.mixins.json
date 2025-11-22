@@ -10,6 +10,7 @@
     "PlayerEntityMixin"
   ],
   "client": [
+    "client.ClientPlayInteractionManagerMixin",
     "client.GameRendererMixin",
     "client.InGameHudMixin",
     "client.MinecraftClientMixin",
