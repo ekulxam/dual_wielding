@@ -1,10 +1,9 @@
-package survivalblock.dual_wielding;
+package survivalblock.dual_wielding.common;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -40,20 +39,17 @@ public class DualWieldingUnbound implements ModInitializer {
         original.call(instance);
     }
 
-    public record HandStackPair(ItemStack stack, EquipmentSlot handSlot) {
+    public record HandStackPair(ItemStack stack, Hand hand) {
 
-        public HandStackPair(ItemStack stack, Hand hand) {
-            this(stack, LivingEntity.getSlotForHand(hand));
-        }
-
-        public Hand getHand() {
-            if (this.handSlot == EquipmentSlot.MAINHAND) {
-                return Hand.MAIN_HAND;
+        @SuppressWarnings("unused")
+        public EquipmentSlot handSlot() {
+            if (this.hand == Hand.MAIN_HAND) {
+                return EquipmentSlot.MAINHAND;
             }
-            if (this.handSlot == EquipmentSlot.OFFHAND) {
-                return Hand.OFF_HAND;
+            if (this.hand == Hand.OFF_HAND) {
+                return EquipmentSlot.OFFHAND;
             }
-            throw new IllegalStateException("Expected handSlot to be MAINHAND or OFFHAND but actually was " + handSlot.name());
+            throw new IllegalStateException("Expected hand to be MAIN_HAND or OFF_HAND but actually was " + hand.name());
         }
     }
 }

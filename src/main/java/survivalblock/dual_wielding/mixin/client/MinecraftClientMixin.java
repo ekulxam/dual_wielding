@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import survivalblock.dual_wielding.DualWieldingUnbound;
+import survivalblock.dual_wielding.common.DualWieldingUnbound;
 import survivalblock.dual_wielding.common.injected_interface.IHaveAnotherTarget;
 
 @Mixin(MinecraftClient.class)

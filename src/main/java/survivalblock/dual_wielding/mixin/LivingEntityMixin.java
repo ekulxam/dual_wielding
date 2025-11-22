@@ -28,7 +28,7 @@ public abstract class LivingEntityMixin extends Entity {
     public abstract ItemStack getMainHandStack();
 
     @ModifyReturnValue(method = "getWeaponStack", at = @At("RETURN"))
-    protected ItemStack useOffhandSometimes(ItemStack original) {
+    protected ItemStack maybeGetOffhandWeaponStack(ItemStack original) {
         return original;
     }
 }

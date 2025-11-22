@@ -1,8 +1,10 @@
 package survivalblock.dual_wielding.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -10,7 +12,6 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.DefaultAttributeRegistry;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -18,20 +19,18 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import survivalblock.dual_wielding.DualWieldingUnbound;
-import survivalblock.dual_wielding.DualWieldingUnbound.HandStackPair;
+import survivalblock.dual_wielding.common.DualWieldingUnbound;
+import survivalblock.dual_wielding.common.DualWieldingUnbound.HandStackPair;
 import survivalblock.dual_wielding.common.injected_interface.OffhandAttackingPlayer;
 
 import java.util.List;
 
-@Debug(export = true)
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntityMixin implements OffhandAttackingPlayer {
 
@@ -43,6 +42,9 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
 
     @Unique
     private ItemStack dual_wielding$prevOffhandWeaponStack = ItemStack.EMPTY;
+
+    @Unique
+    private boolean dual_wielding$attackingWithOffhand = false;
 
     public PlayerEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -59,8 +61,23 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
     }
 
     @Override
-    protected ItemStack useOffhandSometimes(ItemStack original) {
-        return this.dual_wielding$shouldAttackWithOffhand() ? this.getOffHandStack() : original;
+    protected ItemStack maybeGetOffhandWeaponStack(ItemStack original) {
+        if (this.dual_wielding$shouldAttackWithOffhand() || this.dual_wielding$attackingWithOffhand) {
+            return this.getOffHandStack();
+        }
+        return original;
+    }
+
+    @WrapMethod(method = "attack")
+    private void wrapOffhandAttack(Entity target, Operation<Void> original) {
+        this.dual_wielding$attackingWithOffhand = this.dual_wielding$shouldAttackWithOffhand();
+        try {
+            original.call(target);
+        } catch (Throwable throwable) {
+            this.dual_wielding$attackingWithOffhand = false;
+            throw throwable;
+        }
+        this.dual_wielding$attackingWithOffhand = false;
     }
 
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;lastAttackedTicks:I", opcode = Opcodes.PUTFIELD))
@@ -107,11 +124,8 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
 
     @Override
     public AttributeContainer dual_wielding$getOffhandAttributes() {
-        return this.dual_wielding$getOffhandAttributes(this.getAttributes());
-    }
+        AttributeContainer original = this.getAttributes();
 
-    @Override
-    public AttributeContainer dual_wielding$getOffhandAttributes(AttributeContainer original) {
         List<HandStackPair> handStacks = List.of(
                 new HandStackPair(this.getMainHandStack(), Hand.MAIN_HAND),
                 new HandStackPair(this.getOffHandStack(), Hand.OFF_HAND)

@@ -28,10 +28,6 @@ public interface OffhandAttackingPlayer {
         return (float)(1.0 / this.dual_wielding$getOffhandAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) * 20.0);
     }
 
-    default AttributeContainer dual_wielding$getOffhandAttributes(AttributeContainer original) {
-        throw new UnsupportedOperationException();
-    }
-
     default AttributeContainer dual_wielding$getOffhandAttributes() {
         throw new UnsupportedOperationException();
     }

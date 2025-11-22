@@ -3,12 +3,12 @@
 	"id": "dual_wielding",
 	"version": "${version}",
 	"name": "Dual Wielding Unbound",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Fixes dual wielding (only attack with the attack keybind)",
 	"authors": [
 		"Survivalblock"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
+		"homepage": "https://modrinth.com/mod/dual_wielding",
 		"sources": "https://github.com/ekulxam/dual_wielding",
         "issues": "https://github.com/ekulxam/dual_wielding/issues"
 	},
@@ -17,10 +17,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"survivalblock.dual_wielding.DualWieldingUnbound"
+          "survivalblock.dual_wielding.common.DualWieldingUnbound"
 		],
 		"fabric-datagen": [
-			"survivalblock.dual_wielding.DualWieldingUnboundDataGenerator"
+          "survivalblock.dual_wielding.client.DualWieldingUnboundDataGenerator"
 		]
 	},
 	"mixins": [
