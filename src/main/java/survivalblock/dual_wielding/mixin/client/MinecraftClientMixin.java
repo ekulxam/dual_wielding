@@ -40,8 +40,8 @@ public class MinecraftClientMixin implements IHaveAnotherTarget {
     }
 
     @WrapOperation(method = "doAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;resetLastAttackedTicks()V"))
-    private void resetForOffhand(ClientPlayerEntity instance, Operation<Void> original) {
-        DualWieldingUnbound.resetLastAttackedTicks(instance, original);
+    private void resetForOffhand(ClientPlayerEntity instance, Operation<Void> original, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
+        DualWieldingUnbound.resetLastAttackedTicks(instance, original, localBooleanRef.get());
     }
 
     @Inject(method = "doAttack", at = @At("HEAD"))

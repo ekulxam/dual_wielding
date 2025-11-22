@@ -10,6 +10,7 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.DefaultAttributeRegistry;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -116,14 +117,12 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
                 new HandStackPair(this.getOffHandStack(), Hand.OFF_HAND)
         );
 
-        // offhand
-        dual_wielding$switchHandAttributes(original, handStacks, true);
-
         //noinspection unchecked
         AttributeContainer attributes = new AttributeContainer(DefaultAttributeRegistry.get((EntityType<? extends LivingEntity>) this.getType()));
+        attributes.dual_wielding$setUnsyncable(true);
+        attributes.setFrom(original);
 
-        // go back to mainhand
-        dual_wielding$switchHandAttributes(original, handStacks, false);
+        dual_wielding$switchHandAttributes(attributes, handStacks, true);
 
         return attributes;
     }

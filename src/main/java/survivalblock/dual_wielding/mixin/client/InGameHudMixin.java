@@ -61,7 +61,7 @@ public class InGameHudMixin {
             drawFull &= targetedEntity.isAlive();
         }
 
-        int j = context.getScaledWindowHeight() / 2 - 7 + 16 - 6;
+        int j = context.getScaledWindowHeight() / 2 - 7 + 16 + 6;
         int k = context.getScaledWindowWidth() / 2 - 8;
         if (drawFull) {
             context.drawGuiTexture(CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE, k, j, 16, 16);
@@ -83,10 +83,12 @@ public class InGameHudMixin {
         float attackProgress = this.client.player.dual_wielding$getOffhandAttackCooldownProgress(0.0F);
 
         if (attackProgress < 1.0F) {
-            int n = context.getScaledWindowHeight() - 20;
-            int o = halfWidth + 91 + 6;
+            int n = context.getScaledWindowHeight() - 24 - 18;
+            int o;
             if (arm.getOpposite() == Arm.RIGHT) {
-                o = halfWidth - 91 - 22;
+                o = halfWidth - 91 - 26;
+            } else {
+                o = halfWidth + 91 + 10;
             }
 
             int p = (int) (attackProgress * 19.0F);

@@ -29,7 +29,11 @@ public class DualWieldingUnbound implements ModInitializer {
 	}
 
     public static void resetLastAttackedTicks(PlayerEntity instance, Operation<Void> original) {
-        if (instance.dual_wielding$shouldAttackWithOffhand()) {
+        resetLastAttackedTicks(instance, original, instance.dual_wielding$shouldAttackWithOffhand());
+    }
+
+    public static void resetLastAttackedTicks(PlayerEntity instance, Operation<Void> original, boolean offhandAttack) {
+        if (offhandAttack) {
             instance.dual_wielding$resetOffhandLastAttackedTicks();
             return;
         }
