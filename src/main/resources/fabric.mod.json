@@ -33,7 +33,8 @@
 		"fabric-api": "*"
 	},
     "breaks": {
-      "dualwielding": "*"
+      "dualwielding": "*",
+      "sdw": "*"
     },
     "custom": {
         "loom:injected_interfaces": {
