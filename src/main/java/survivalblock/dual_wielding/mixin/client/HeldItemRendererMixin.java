@@ -20,7 +20,7 @@ public class HeldItemRendererMixin {
     @Shadow
     private float offHandHeight;
 
-    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 1), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackCooldownProgress(F)F")))
+    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 1), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F")))
     private float offhandRaiseAnimation(float value, float min, float max, Operation<Float> original, @Local LocalPlayer player, @Local(ordinal = 1) ItemStack offhandStack) {
         float progress = player.dual_wielding$getOffhandAttackCooldownProgress(1.0F);
         value = this.offHandItem == offhandStack ? progress * progress * progress : 0;

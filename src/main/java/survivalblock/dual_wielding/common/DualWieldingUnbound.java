@@ -19,11 +19,9 @@ public class DualWieldingUnbound implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
-
-		LOGGER.info("Hello Fabric world!");
+        // TODO: double smash attack?
+        // TODO: fix offhand sweep particle
+        // TODO: port
 	}
 
     public static void resetLastAttackedTicks(Player instance, Operation<Void> original) {
