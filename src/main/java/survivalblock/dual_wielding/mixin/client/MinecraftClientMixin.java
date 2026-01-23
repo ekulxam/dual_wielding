@@ -4,10 +4,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Hand;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import survivalblock.dual_wielding.common.DualWieldingUnbound;
 import survivalblock.dual_wielding.common.injected_interface.IHaveAnotherTarget;
 
-@Mixin(MinecraftClient.class)
+@Mixin(Minecraft.class)
 public class MinecraftClientMixin implements IHaveAnotherTarget {
 
     @Shadow
     @Nullable
-    public ClientPlayerEntity player;
+    public LocalPlayer player;
     @Nullable
     @Unique
     private Entity dual_wielding$offhandTargetedEntity;
@@ -38,20 +38,20 @@ public class MinecraftClientMixin implements IHaveAnotherTarget {
         return this.dual_wielding$offhandTargetedEntity;
     }
 
-    @WrapOperation(method = "doAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;resetLastAttackedTicks()V"))
-    private void resetForOffhand(ClientPlayerEntity instance, Operation<Void> original, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
+    @WrapOperation(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;resetLastAttackedTicks()V"))
+    private void resetForOffhand(LocalPlayer instance, Operation<Void> original, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
         DualWieldingUnbound.resetLastAttackedTicks(instance, original, localBooleanRef.get());
     }
 
-    @Inject(method = "doAttack", at = @At("HEAD"))
+    @Inject(method = "startAttack", at = @At("HEAD"))
     private void wasSupposedToAttackWithOffhand(CallbackInfoReturnable<Boolean> cir, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
         localBooleanRef.set(this.player.dual_wielding$shouldAttackWithOffhand());
     }
 
-    @WrapOperation(method = "doAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;swingHand(Lnet/minecraft/util/Hand;)V"))
-    private void swingOffhandSometimes(ClientPlayerEntity instance, Hand hand, Operation<Void> original, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
+    @WrapOperation(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swingHand(Lnet/minecraft/world/InteractionHand;)V"))
+    private void swingOffhandSometimes(LocalPlayer instance, InteractionHand hand, Operation<Void> original, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
         if (localBooleanRef.get()) {
-            hand = Hand.OFF_HAND;
+            hand = InteractionHand.OFF_HAND;
         }
         original.call(instance, hand);
     }

@@ -1,6 +1,6 @@
 package survivalblock.dual_wielding.common.injected_interface;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 public interface IHaveAnotherTarget {
