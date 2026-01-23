@@ -25,7 +25,7 @@ public abstract class GameRendererMixin {
     @Shadow
     protected abstract HitResult pick(Entity camera, double blockInteractionRange, double entityInteractionRange, float tickDelta);
 
-    @Inject(method = "pick(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getBlockInteractionRange()D"))
+    @Inject(method = "pick(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;blockInteractionRange()D"))
     private void updateOffhandCrosshairTarget(float tickDelta, CallbackInfo ci, @Local Entity entity) {
         AttributeMap offhandAttributes = this.minecraft.player.dual_wielding$getOffhandAttributes();
         double blockReach = offhandAttributes.getValue(Attributes.BLOCK_INTERACTION_RANGE);

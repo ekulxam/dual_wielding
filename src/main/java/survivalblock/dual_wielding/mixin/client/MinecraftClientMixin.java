@@ -38,7 +38,7 @@ public class MinecraftClientMixin implements IHaveAnotherTarget {
         return this.dual_wielding$offhandTargetedEntity;
     }
 
-    @WrapOperation(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;resetLastAttackedTicks()V"))
+    @WrapOperation(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;resetAttackStrengthTicker()V"))
     private void resetForOffhand(LocalPlayer instance, Operation<Void> original, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
         DualWieldingUnbound.resetLastAttackedTicks(instance, original, localBooleanRef.get());
     }
@@ -48,7 +48,7 @@ public class MinecraftClientMixin implements IHaveAnotherTarget {
         localBooleanRef.set(this.player.dual_wielding$shouldAttackWithOffhand());
     }
 
-    @WrapOperation(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swingHand(Lnet/minecraft/world/InteractionHand;)V"))
+    @WrapOperation(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V"))
     private void swingOffhandSometimes(LocalPlayer instance, InteractionHand hand, Operation<Void> original, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
         if (localBooleanRef.get()) {
             hand = InteractionHand.OFF_HAND;

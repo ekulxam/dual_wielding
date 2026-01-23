@@ -63,7 +63,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
     @Override
     protected ItemStack maybeGetOffhandWeaponStack(ItemStack original) {
         if (this.dual_wielding$shouldAttackWithOffhand() || this.dual_wielding$attackingWithOffhand) {
-            return this.getOffHandStack();
+            return this.getOffhandItem();
         }
         return original;
     }
@@ -83,7 +83,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/player/Player;attackStrengthTicker:I", opcode = Opcodes.PUTFIELD))
     private void tickOffhandWeapon(CallbackInfo ci) {
         this.dual_wielding$offhandLastAttackedTicks++;
-        ItemStack stack = this.getOffHandStack();
+        ItemStack stack = this.getOffhandItem();
         if (!ItemStack.matches(this.dual_wielding$prevOffhandWeaponStack, stack)) {
             if (!ItemStack.isSameItem(this.dual_wielding$prevOffhandWeaponStack, stack)) {
                 this.dual_wielding$resetOffhandLastAttackedTicks();
@@ -127,8 +127,8 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
         AttributeMap original = this.getAttributes();
 
         List<HandStackPair> handStacks = List.of(
-                new HandStackPair(this.getMainHandStack(), InteractionHand.MAIN_HAND),
-                new HandStackPair(this.getOffHandStack(), InteractionHand.OFF_HAND)
+                new HandStackPair(this.getMainHandItem(), InteractionHand.MAIN_HAND),
+                new HandStackPair(this.getOffhandItem(), InteractionHand.OFF_HAND)
         );
 
         //noinspection unchecked
@@ -143,15 +143,16 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
 
     @Override
     public boolean dual_wielding$shouldAttackWithOffhand() {
-        if (this.getOffHandStack().isEmpty()) {
+        if (this.getOffhandItem().isEmpty()) {
             return false;
         }
-        if (this.getMainHandStack().isEmpty()) {
+        if (this.getMainHandItem().isEmpty()) {
             return true;
         }
         return this.getAttackStrengthScale(0.0F) < this.dual_wielding$getOffhandAttackCooldownProgress(0.0F);
     }
 
+    @SuppressWarnings("SameParameterValue")
     @Unique
     private void dual_wielding$switchHandAttributes(AttributeMap original, List<HandStackPair> handStacks, boolean toOffhand) {
         for (HandStackPair pair : handStacks) {

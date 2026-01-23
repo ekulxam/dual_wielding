@@ -44,7 +44,7 @@ public class InGameHudMixin {
     @Final
     private static ResourceLocation HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE;
 
-    @Inject(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackCooldownProgress(F)F"))
+    @Inject(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F"))
     private void crosshairOffhandAttackProgress(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
         LocalPlayer player = this.minecraft.player;
 
@@ -72,7 +72,7 @@ public class InGameHudMixin {
         }
     }
 
-    @Inject(method = "renderItemHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackCooldownProgress(F)F"))
+    @Inject(method = "renderItemHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F"))
     private void hotbarOffhandAttackProgress(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci, @Local HumanoidArm arm, @Local(ordinal = 0) int halfWidth) {
         LocalPlayer player = this.minecraft.player;
 
