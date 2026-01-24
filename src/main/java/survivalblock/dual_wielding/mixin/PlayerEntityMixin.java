@@ -3,11 +3,15 @@ package survivalblock.dual_wielding.mixin;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
+import net.minecraft.world.damagesource.DamageSource;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import survivalblock.dual_wielding.common.DualWieldingUnbound;
@@ -30,6 +34,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+
+import static survivalblock.dual_wielding.common.DualWieldingUnbound.DOUBLE_ATTACK_CHARGE_THRESHOLD;
 
 @Mixin(Player.class)
 public abstract class PlayerEntityMixin extends LivingEntityMixin implements OffhandAttackingPlayer {
@@ -78,6 +84,34 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
             throw throwable;
         }
         this.dual_wielding$attackingWithOffhand = false;
+    }
+    
+    @Inject(method = "attack", at = @At("HEAD"))
+    private void checkDoubleAttack(CallbackInfo ci, @Share("doubleAttacking") LocalBooleanRef localBooleanRef) {
+        localBooleanRef.set(
+                this.getAttackStrengthScale(0.5F) >= DOUBLE_ATTACK_CHARGE_THRESHOLD
+                        && this.dual_wielding$getOffhandAttackCooldownProgress(0.5F) >= DOUBLE_ATTACK_CHARGE_THRESHOLD
+        );
+    }
+
+    @WrapOperation(
+            method = "attack",
+            at = {
+                    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
+                    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z")
+            }
+    )
+    private boolean allowNextAttackIfDouble(@Coerce Entity instance, DamageSource damageSource, float amount, Operation<Boolean> original, @Share("doubleAttacking") LocalBooleanRef localBooleanRef) {
+        if (!localBooleanRef.get()) {
+            return original.call(instance, damageSource, amount);
+        }
+
+        int originalInvulTime = instance.invulnerableTime;
+        boolean succeeded = original.call(instance, damageSource, amount);
+        if (succeeded || originalInvulTime != instance.invulnerableTime) {
+            instance.invulnerableTime = 0;
+        }
+        return succeeded;
     }
 
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/player/Player;attackStrengthTicker:I", opcode = Opcodes.PUTFIELD))

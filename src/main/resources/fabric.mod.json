@@ -20,7 +20,7 @@
           "survivalblock.dual_wielding.common.DualWieldingUnbound"
 		],
 		"fabric-datagen": [
-          "survivalblock.dual_wielding.client.DualWieldingUnboundDataGenerator"
+          "survivalblock.dual_wielding.client.datagen.DualWieldingUnboundDataGenerator"
 		]
 	},
 	"mixins": [
