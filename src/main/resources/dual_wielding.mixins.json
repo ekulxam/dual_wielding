@@ -8,7 +8,8 @@
   "mixins": [
     "AttributeContainerMixin",
     "LivingEntityMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "client.ResourceManagerHelperImplMixin"
   ],
   "client": [
     "client.ClientPlayInteractionManagerMixin",
@@ -16,6 +17,7 @@
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
     "client.MinecraftClientMixin",
+    "client.ParticleDescriptionAccessor",
     "client.entityrenderer.EntityRendererMixin",
     "client.entityrenderer.ItemFrameEntityRendererMixin",
     "client.entityrenderer.MobEntityRendererMixin"

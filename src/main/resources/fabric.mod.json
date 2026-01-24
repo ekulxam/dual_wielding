@@ -19,6 +19,9 @@
 		"main": [
           "survivalblock.dual_wielding.common.DualWieldingUnbound"
 		],
+        "client": [
+          "survivalblock.dual_wielding.client.DualWieldingUnboundClient"
+        ],
 		"fabric-datagen": [
           "survivalblock.dual_wielding.client.datagen.DualWieldingUnboundDataGenerator"
 		]

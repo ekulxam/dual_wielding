@@ -1,10 +1,12 @@
 package survivalblock.dual_wielding.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.damagesource.DamageSource;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import survivalblock.dual_wielding.common.DualWieldingUnbound;
 import survivalblock.dual_wielding.common.DualWieldingUnbound.HandStackPair;
+import survivalblock.dual_wielding.common.init.DualWieldingUnboundParticleTypes;
 import survivalblock.dual_wielding.common.injected_interface.OffhandAttackingPlayer;
 
 import java.util.List;
@@ -112,6 +115,11 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
             instance.invulnerableTime = 0;
         }
         return succeeded;
+    }
+
+    @ModifyExpressionValue(method = "sweepAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/core/particles/ParticleTypes;SWEEP_ATTACK:Lnet/minecraft/core/particles/SimpleParticleType;", opcode = Opcodes.GETSTATIC))
+    private SimpleParticleType useOffhandSweepParticleWhenApplicable(SimpleParticleType original) {
+        return this.dual_wielding$attackingWithOffhand ? DualWieldingUnboundParticleTypes.OFFHAND_SWEEP : original;
     }
 
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/player/Player;attackStrengthTicker:I", opcode = Opcodes.PUTFIELD))

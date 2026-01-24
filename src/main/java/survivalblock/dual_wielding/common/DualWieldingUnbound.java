@@ -2,12 +2,14 @@ package survivalblock.dual_wielding.common;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import survivalblock.dual_wielding.common.init.DualWieldingUnboundParticleTypes;
 
 public class DualWieldingUnbound implements ModInitializer {
 	public static final String MOD_ID = "dual_wielding";
@@ -23,8 +25,13 @@ public class DualWieldingUnbound implements ModInitializer {
 	public void onInitialize() {
         // TODO: double smash attack?
         // TODO: fix offhand sweep particle
+        DualWieldingUnboundParticleTypes.init();
         // TODO: port
 	}
+
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
 
     public static void resetLastAttackedTicks(Player instance, Operation<Void> original) {
         resetLastAttackedTicks(instance, original, instance.dual_wielding$shouldAttackWithOffhand());
