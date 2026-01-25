@@ -29,6 +29,7 @@
 	"mixins": [
 		"dual_wielding.mixins.json"
 	],
+    "accessWidener": "dual_wielding.classtweaker",
 	"depends": {
 		"fabricloader": ">=0.18.1",
 		"minecraft": "~1.21.1",
@@ -38,12 +39,5 @@
     "breaks": {
       "dualwielding": "*",
       "sdw": "*"
-    },
-    "custom": {
-        "loom:injected_interfaces": {
-          "net/minecraft/class_310": ["survivalblock/dual_wielding/common/injected_interface/IHaveAnotherTarget"],
-          "net/minecraft/class_1657": ["survivalblock/dual_wielding/common/injected_interface/OffhandAttackingPlayer"],
-          "net/minecraft/class_5131": ["survivalblock/dual_wielding/common/injected_interface/Unsyncable"]
-        }
     }
 }

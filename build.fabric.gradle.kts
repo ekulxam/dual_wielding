@@ -98,7 +98,7 @@ tasks.register("autoVersionChangelog") {
         val changelog = File("changelog.md")
         val reader = BufferedReader(FileReader(changelog))
         val lines = reader.readLines().toMutableList()
-        val title = "Directional Melons ${project.property("mod_version")}"
+        val title = "Dual Wielding Unbound ${project.property("mod_version")}"
         lines[0] = title
         changelog.bufferedWriter().use { writer ->
             for (i in 0..<lines.size) {
@@ -123,6 +123,7 @@ loom {
     }
 
     fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
+    accessWidenerPath = rootProject.file("src/main/resources/dual_wielding.classtweaker")
 
     mixin {
         useLegacyMixinAp = true

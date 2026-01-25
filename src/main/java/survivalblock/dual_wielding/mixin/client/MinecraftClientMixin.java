@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,6 +25,9 @@ public class MinecraftClientMixin implements IHaveAnotherTarget {
     @Shadow
     @Nullable
     public LocalPlayer player;
+    @Shadow
+    @Nullable
+    public HitResult hitResult;
     @Nullable
     @Unique
     private Entity dual_wielding$offhandTargetedEntity;
@@ -38,14 +42,14 @@ public class MinecraftClientMixin implements IHaveAnotherTarget {
         return this.dual_wielding$offhandTargetedEntity;
     }
 
+    @Inject(method = "startAttack", at = @At("HEAD"))
+    private void wasSupposedToAttackWithOffhand(CallbackInfoReturnable<Boolean> cir, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
+        localBooleanRef.set(this.player.dual_wielding$shouldAttackWithOffhand() && (this.hitResult == null || this.hitResult.getType() != HitResult.Type.BLOCK));
+    }
+    
     @WrapOperation(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;resetAttackStrengthTicker()V"))
     private void resetForOffhand(LocalPlayer instance, Operation<Void> original, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
         DualWieldingUnbound.resetLastAttackedTicks(instance, original, localBooleanRef.get());
-    }
-
-    @Inject(method = "startAttack", at = @At("HEAD"))
-    private void wasSupposedToAttackWithOffhand(CallbackInfoReturnable<Boolean> cir, @Share("wasSupposedToAttackWithOffhand")LocalBooleanRef localBooleanRef) {
-        localBooleanRef.set(this.player.dual_wielding$shouldAttackWithOffhand());
     }
 
     @WrapOperation(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V"))

@@ -49,11 +49,9 @@ public class ArtificialDirectorySpriteSource implements SpriteSource {
             int width = nativeImage.getWidth();
             int height = nativeImage.getHeight();
 
-
-
             AnimationMetadataSection animationMetadataSection = imageAndMetadata.metadata().getSection(AnimationMetadataSection.SERIALIZER)
                     .orElse(AnimationMetadataSection.EMPTY);
-            FrameSize frameSize = animationMetadataSection.calculateFrameSize(nativeImage.getWidth(), nativeImage.getHeight());
+            FrameSize frameSize = animationMetadataSection.calculateFrameSize(width, height);
 
             ResourceLocation idWithoutDirectory = id.withPath(
                     string ->
@@ -61,7 +59,7 @@ public class ArtificialDirectorySpriteSource implements SpriteSource {
                                     .replace(".png", "")
             );
 
-            if (Mth.isMultipleOf(nativeImage.getWidth(), frameSize.width()) && Mth.isMultipleOf(nativeImage.getHeight(), frameSize.height())) {
+            if (Mth.isMultipleOf(width, frameSize.width()) && Mth.isMultipleOf(height, frameSize.height())) {
                 output.add(
                         id,
                         spriteResourceLoader -> new SpriteContents(

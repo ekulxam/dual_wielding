@@ -23,8 +23,6 @@ public class DualWieldingUnbound implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-        // TODO: double smash attack?
-        // TODO: fix offhand sweep particle
         DualWieldingUnboundParticleTypes.init();
         // TODO: port
 	}

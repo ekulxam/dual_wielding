@@ -71,7 +71,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
 
     @Override
     protected ItemStack maybeGetOffhandWeaponStack(ItemStack original) {
-        if (this.dual_wielding$shouldAttackWithOffhand() || this.dual_wielding$attackingWithOffhand) {
+        if (this.dual_wielding$attackingWithOffhand) {
             return this.getOffhandItem();
         }
         return original;
@@ -164,6 +164,14 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
         return original.call(instance, hand);
     }
 
+    @ModifyExpressionValue(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSources;playerAttack(Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/damagesource/DamageSource;"))
+    private DamageSource accountForOffhandSource(DamageSource original) {
+        if (this.dual_wielding$attackingWithOffhand) {
+            original.dual_wielding$setWasPreviouslyOffhanding(true);
+        }
+        return original;
+    }
+
     @Override
     public AttributeMap dual_wielding$getOffhandAttributes() {
         AttributeMap original = this.getAttributes();
@@ -179,7 +187,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
         attributes.assignAllValues(original);
 
         dual_wielding$switchHandAttributes(attributes, handStacks, true);
-
+        dual_wielding$switchHandAttributes(original, handStacks, false);
         return attributes;
     }
 

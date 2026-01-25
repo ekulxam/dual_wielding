@@ -1,0 +1,6 @@
+classTweaker v1 named
+
+inject-interface net/minecraft/client/Minecraft survivalblock/dual_wielding/common/injected_interface/IHaveAnotherTarget
+inject-interface net/minecraft/world/entity/player/Player survivalblock/dual_wielding/common/injected_interface/OffhandAttackingPlayer
+inject-interface net/minecraft/world/entity/ai/attributes/AttributeMap survivalblock/dual_wielding/common/injected_interface/Unsyncable
+inject-interface net/minecraft/world/damagesource/DamageSource survivalblock/dual_wielding/common/injected_interface/PreviouslyOffhandedSource
