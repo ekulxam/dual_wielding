@@ -9,8 +9,6 @@
     "AttributeContainerMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "client.particle.LifecycledResourceManagerImplAccessor",
-    "client.particle.ResourceManagerHelperImplMixin"
   ],
   "client": [
     "client.ClientPlayInteractionManagerMixin",
@@ -24,7 +22,6 @@
     "client.particle.AtlasLoaderAccessor",
     "client.particle.AtlasSourceManagerAccessor",
     "client.particle.ParticleManagerAccessor",
-    "client.particle.ParticleManagerMixin",
     "client.particle.ParticleTextureDataAccessor",
     "client.particle.SpriteLoaderMixin"
   ],
