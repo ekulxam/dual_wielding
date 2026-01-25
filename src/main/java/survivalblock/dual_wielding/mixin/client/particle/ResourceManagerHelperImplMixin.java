@@ -1,4 +1,4 @@
-package survivalblock.dual_wielding.mixin.client;
+package survivalblock.dual_wielding.mixin.client.particle;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

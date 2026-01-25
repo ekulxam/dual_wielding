@@ -9,7 +9,8 @@
     "AttributeContainerMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "client.ResourceManagerHelperImplMixin"
+    "client.particle.LifecycledResourceManagerImplAccessor",
+    "client.particle.ResourceManagerHelperImplMixin"
   ],
   "client": [
     "client.ClientPlayInteractionManagerMixin",
@@ -17,10 +18,15 @@
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
     "client.MinecraftClientMixin",
-    "client.ParticleDescriptionAccessor",
     "client.entityrenderer.EntityRendererMixin",
     "client.entityrenderer.ItemFrameEntityRendererMixin",
-    "client.entityrenderer.MobEntityRendererMixin"
+    "client.entityrenderer.MobEntityRendererMixin",
+    "client.particle.AtlasLoaderAccessor",
+    "client.particle.AtlasSourceManagerAccessor",
+    "client.particle.ParticleManagerAccessor",
+    "client.particle.ParticleManagerMixin",
+    "client.particle.ParticleTextureDataAccessor",
+    "client.particle.SpriteLoaderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

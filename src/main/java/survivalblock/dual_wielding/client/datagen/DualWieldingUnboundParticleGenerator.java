@@ -1,22 +1,14 @@
 package survivalblock.dual_wielding.client.datagen;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRequirements;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.client.particle.ParticleDescription;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import survivalblock.dual_wielding.common.DualWieldingUnbound;
-import survivalblock.dual_wielding.common.init.DualWieldingUnboundParticleTypes;
-import survivalblock.dual_wielding.mixin.client.ParticleDescriptionAccessor;
+import survivalblock.dual_wielding.mixin.client.particle.ParticleTextureDataAccessor;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -27,7 +19,7 @@ import static survivalblock.dual_wielding.common.init.DualWieldingUnboundParticl
 
 public class DualWieldingUnboundParticleGenerator extends FabricCodecDataProvider<ParticleDescription> {
 
-    public static final Codec<ParticleDescription> CODEC = RecordCodecBuilder.<ParticleDescription>create(
+    public static final Codec<ParticleDescription> CODEC = RecordCodecBuilder.create(
                     instance -> instance.group(
                                     ResourceLocation.CODEC.listOf(1, Integer.MAX_VALUE).fieldOf("textures").forGetter(ParticleDescription::getTextures)
                             )
@@ -51,7 +43,7 @@ public class DualWieldingUnboundParticleGenerator extends FabricCodecDataProvide
     }
 
     public static ParticleDescription create(List<ResourceLocation> textures) {
-        return ParticleDescriptionAccessor.dual_wielding$invokeInit(textures);
+        return ParticleTextureDataAccessor.dual_wielding$invokeInit(textures);
     }
 
     @Override
