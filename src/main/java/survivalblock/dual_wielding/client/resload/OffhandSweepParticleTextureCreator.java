@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.FastColor;
 import survivalblock.dual_wielding.common.DualWieldingUnbound;
 
 import java.io.IOException;
@@ -41,7 +40,7 @@ public final class OffhandSweepParticleTextureCreator implements SimpleSynchrono
 
         List<ResourceLocation> originalSweepTexturePaths = particleTexturesWithOrdinal(ResourceLocation.withDefaultNamespace("textures/particle/sweep"), ".png", 7);
         List<ResourceLocation> offhandSweepTexturePaths = particleTexturesWithOrdinal(OFFHAND_SWEEP_ID.withPath(path -> "textures/particle/" + path), ".png", 7);
-        
+
         for (int i = 0; i <= 7; i++) {
             ResourceLocation offhandSweepTexturePath = offhandSweepTexturePaths.get(i);
             AbstractTexture maybeExisting = textureManager.getTexture(offhandSweepTexturePath, null);
@@ -59,6 +58,7 @@ public final class OffhandSweepParticleTextureCreator implements SimpleSynchrono
                 continue;
             }
 
+            //noinspection ConstantValue
             if (original == null) {
                 continue;
             }
