@@ -7,7 +7,9 @@ import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceMetadata;
 import survivalblock.dual_wielding.common.DualWieldingUnbound;
 
 import java.io.IOException;
@@ -22,7 +24,7 @@ public final class OffhandSweepParticleTextureCreator implements SimpleSynchrono
     public static final OffhandSweepParticleTextureCreator INSTANCE = new OffhandSweepParticleTextureCreator();
     public static final ResourceLocation ID = DualWieldingUnbound.id("offhand_sweep_particle_texture_creator");
 
-    public final Map<ResourceLocation, NativeImage> images = new HashMap<>();
+    public final Map<ResourceLocation, ImageAndMetadata> images = new HashMap<>();
 
     private OffhandSweepParticleTextureCreator() {
     }
@@ -51,8 +53,11 @@ public final class OffhandSweepParticleTextureCreator implements SimpleSynchrono
 
             ResourceLocation originalSweepTexturePath = originalSweepTexturePaths.get(i);
             NativeImage original;
+            ResourceMetadata metadata;
             try {
-                original = NativeImage.read(resourceManager.open(originalSweepTexturePath));
+                Resource resource = resourceManager.getResourceOrThrow(originalSweepTexturePath);
+                original = NativeImage.read(resource.open());
+                metadata = resource.metadata();
             } catch (IOException e) {
                 DualWieldingUnbound.LOGGER.error("An error occurred when loading the vanilla sweep particle texture \"{}\"!", originalSweepTexturePath, e);
                 continue;
@@ -72,10 +77,13 @@ public final class OffhandSweepParticleTextureCreator implements SimpleSynchrono
                         generated.setPixelRGBA(width - 1 - x, y, original.getPixelRGBA(x, y));
                     }
                 }
-                images.put(offhandSweepTexturePath, generated);
+                images.put(offhandSweepTexturePath, new ImageAndMetadata(generated, metadata));
             } catch (Throwable throwable) {
                 DualWieldingUnbound.LOGGER.error("An error occurred when dynamically generating the offhand sweep particle texture \"{}\"!", offhandSweepTexturePath, throwable);
             }
         }
+    }
+
+    public record ImageAndMetadata(NativeImage image, ResourceMetadata metadata) {
     }
 }

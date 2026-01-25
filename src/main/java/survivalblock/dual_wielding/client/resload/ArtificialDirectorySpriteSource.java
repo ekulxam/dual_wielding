@@ -6,10 +6,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.client.renderer.texture.atlas.SpriteSourceType;
+import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceMetadata;
+import net.minecraft.util.Mth;
 import survivalblock.dual_wielding.common.DualWieldingUnbound;
 import survivalblock.dual_wielding.mixin.client.particle.AtlasSourceManagerAccessor;
 
@@ -39,32 +41,47 @@ public class ArtificialDirectorySpriteSource implements SpriteSource {
 
         for (ResourceLocation id : textureIds) {
             ResourceMetadata metadata = ResourceMetadata.EMPTY;
-            NativeImage nativeImage = OffhandSweepParticleTextureCreator.INSTANCE.images.get(id);
+            OffhandSweepParticleTextureCreator.ImageAndMetadata imageAndMetadata = OffhandSweepParticleTextureCreator.INSTANCE.images.get(id);
+            NativeImage nativeImage = imageAndMetadata.image();
             if (nativeImage == null) {
                 return;
             }
             int width = nativeImage.getWidth();
             int height = nativeImage.getHeight();
-            int greatestCommonFactor;
-            {
-                BigInteger bWidth = BigInteger.valueOf(width);
-                BigInteger bHeight = BigInteger.valueOf(height);
-                greatestCommonFactor = bWidth.gcd(bHeight).intValueExact();
-            }
-            FrameSize frameSize = new FrameSize(greatestCommonFactor, greatestCommonFactor);
 
-            output.add(
-                    id,
-                    spriteResourceLoader -> new SpriteContents(
-                            id.withPath(
-                                    string ->
-                                            string.replace("textures/particle/", "")
-                                                    .replace(".png", "")
-                            ),
-                            frameSize,
-                            nativeImage,
-                            metadata)
+
+
+            AnimationMetadataSection animationMetadataSection = imageAndMetadata.metadata().getSection(AnimationMetadataSection.SERIALIZER)
+                    .orElse(AnimationMetadataSection.EMPTY);
+            FrameSize frameSize = animationMetadataSection.calculateFrameSize(nativeImage.getWidth(), nativeImage.getHeight());
+
+            ResourceLocation idWithoutDirectory = id.withPath(
+                    string ->
+                            string.replace("textures/particle/", "")
+                                    .replace(".png", "")
             );
+
+            if (Mth.isMultipleOf(nativeImage.getWidth(), frameSize.width()) && Mth.isMultipleOf(nativeImage.getHeight(), frameSize.height())) {
+                output.add(
+                        id,
+                        spriteResourceLoader -> new SpriteContents(
+                                idWithoutDirectory,
+                                frameSize,
+                                nativeImage,
+                                metadata
+                        )
+                );
+            } else {
+                DualWieldingUnbound.LOGGER.error(
+                        "Image {} size {},{} is not multiple of frame size {},{}",
+                        id,
+                        nativeImage.getWidth(),
+                        nativeImage.getHeight(),
+                        frameSize.width(),
+                        frameSize.height()
+                );
+                nativeImage.close();
+            }
         }
     }
 
