@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import survivalblock.dual_wielding.common.DualWieldingUnbound;
 
+import static survivalblock.dual_wielding.common.DualWieldingUnbound.ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT;
 import static survivalblock.dual_wielding.common.DualWieldingUnbound.DOUBLE_ATTACK_CHARGE_THRESHOLD;
 
 @Mixin(MultiPlayerGameMode.class)
@@ -48,7 +49,7 @@ public class ClientPlayInteractionManagerMixin {
     @WrapMethod(method = "attack")
     private void doubleAttack(Player player, Entity targetEntity, Operation<Void> original) {
         original.call(player, targetEntity);
-        if (player.getAttackStrengthScale(0.5F) >= DOUBLE_ATTACK_CHARGE_THRESHOLD || player.dual_wielding$getOffhandAttackCooldownProgress(0.5F) >= DOUBLE_ATTACK_CHARGE_THRESHOLD) {
+        if (player.getAttackStrengthScale(ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT) >= DOUBLE_ATTACK_CHARGE_THRESHOLD || player.dual_wielding$getOffhandAttackCooldownProgress(ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT) >= DOUBLE_ATTACK_CHARGE_THRESHOLD) {
             original.call(player, targetEntity);
         }
     }

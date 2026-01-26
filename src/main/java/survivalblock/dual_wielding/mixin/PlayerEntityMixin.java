@@ -38,6 +38,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
+import static survivalblock.dual_wielding.common.DualWieldingUnbound.ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT;
 import static survivalblock.dual_wielding.common.DualWieldingUnbound.DOUBLE_ATTACK_CHARGE_THRESHOLD;
 
 @Mixin(Player.class)
@@ -92,8 +93,8 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Off
     @Inject(method = "attack", at = @At("HEAD"))
     private void checkDoubleAttack(CallbackInfo ci, @Share("doubleAttacking") LocalBooleanRef localBooleanRef) {
         localBooleanRef.set(
-                this.getAttackStrengthScale(0.5F) >= DOUBLE_ATTACK_CHARGE_THRESHOLD
-                        && this.dual_wielding$getOffhandAttackCooldownProgress(0.5F) >= DOUBLE_ATTACK_CHARGE_THRESHOLD
+                this.getAttackStrengthScale(ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT) >= DOUBLE_ATTACK_CHARGE_THRESHOLD
+                        && this.dual_wielding$getOffhandAttackCooldownProgress(ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT) >= DOUBLE_ATTACK_CHARGE_THRESHOLD
         );
     }
 

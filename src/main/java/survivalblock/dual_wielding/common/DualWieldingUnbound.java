@@ -19,6 +19,7 @@ public class DualWieldingUnbound implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    public static final float ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT = 0.5F;
     public static final float DOUBLE_ATTACK_CHARGE_THRESHOLD = 0.99F;
 
 	@Override
