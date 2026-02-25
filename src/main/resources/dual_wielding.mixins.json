@@ -12,11 +12,13 @@
     "PlayerEntityMixin"
   ],
   "client": [
+    "client.ClientPlayerEntityMixin",
     "client.ClientPlayInteractionManagerMixin",
     "client.GameRendererMixin",
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
     "client.MinecraftClientMixin",
+    "client.WorldRendererMixin",
     "client.entityrenderer.EntityRendererMixin",
     "client.entityrenderer.ItemFrameEntityRendererMixin",
     "client.entityrenderer.MobEntityRendererMixin",

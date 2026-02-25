@@ -21,7 +21,7 @@ import survivalblock.dual_wielding.common.DualWieldingUnbound;
 import static survivalblock.dual_wielding.common.DualWieldingUnbound.ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT;
 import static survivalblock.dual_wielding.common.DualWieldingUnbound.DOUBLE_ATTACK_CHARGE_THRESHOLD;
 
-@Mixin(MultiPlayerGameMode.class)
+@Mixin(value = MultiPlayerGameMode.class, priority = 3000)
 public class ClientPlayInteractionManagerMixin {
 
     @Shadow
@@ -48,8 +48,9 @@ public class ClientPlayInteractionManagerMixin {
 
     @WrapMethod(method = "attack")
     private void doubleAttack(Player player, Entity targetEntity, Operation<Void> original) {
+        boolean twice = player.getAttackStrengthScale(ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT) >= DOUBLE_ATTACK_CHARGE_THRESHOLD && player.dual_wielding$getOffhandAttackCooldownProgress(ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT) >= DOUBLE_ATTACK_CHARGE_THRESHOLD;
         original.call(player, targetEntity);
-        if (player.getAttackStrengthScale(ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT) >= DOUBLE_ATTACK_CHARGE_THRESHOLD || player.dual_wielding$getOffhandAttackCooldownProgress(ATTACK_COOLDOWN_PROGRESS_ADJUSTMENT) >= DOUBLE_ATTACK_CHARGE_THRESHOLD) {
+        if (twice && player.dual_wielding$shouldAttackWithOffhand()) {
             original.call(player, targetEntity);
         }
     }

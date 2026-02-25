@@ -4,7 +4,6 @@ import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 public interface IHaveAnotherTarget {
-
     default @Nullable Entity dual_wielding$getOffhandTargetedEntity() {
         throw new UnsupportedOperationException();
     }

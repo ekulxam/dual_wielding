@@ -45,8 +45,6 @@ public class DualWieldingUnbound implements ModInitializer {
     }
 
     public record HandStackPair(ItemStack stack, InteractionHand hand) {
-
-        @SuppressWarnings("unused")
         public EquipmentSlot handSlot() {
             if (this.hand == InteractionHand.MAIN_HAND) {
                 return EquipmentSlot.MAINHAND;
@@ -54,7 +52,7 @@ public class DualWieldingUnbound implements ModInitializer {
             if (this.hand == InteractionHand.OFF_HAND) {
                 return EquipmentSlot.OFFHAND;
             }
-            throw new IllegalStateException("Expected hand to be MAIN_HAND or OFF_HAND but actually was " + hand.name());
+            throw new IllegalStateException("Expected hand to be MAIN_HAND or OFF_HAND but actually was " + this.hand.name());
         }
     }
 }
